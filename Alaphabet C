@@ -1,0 +1,52 @@
+#include<stdio.h>
+int main()
+{
+	int n;
+	printf("enter the number of lines");
+	scanf("%d",&n);
+	int i = 0;
+	while(i <= n)
+	{
+		if(i <= (n/4))
+		{
+			int j = 1;
+			while(j <= (((n/4) + 1) - i))
+			{
+				printf(" ");
+				j++;
+			}
+			int k = 1;
+			while(k <= (((n/4) + 1) + i))
+			{
+				printf("*");
+				k++;
+			}
+		}
+		if(i > (n/4) && i <= (n - (i - 1)))
+		{
+			int m = 1;
+			while(m <= (i - (i - 3)))
+			{
+				printf("*");
+				m++;
+			}
+		}
+		if(i > (n - (n/4)))
+		{
+			int p = 1;
+			while(p <= ((n/4) - (n - i)))
+			{
+				printf("");
+				p++;
+			}
+			int q = 1;
+			while(q <= ((n -i) + 5))
+			{
+				printf("*");
+				q++;
+			}
+		}
+		printf("\n");
+		i++;
+	}
+}
