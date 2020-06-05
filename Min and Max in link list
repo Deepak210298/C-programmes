@@ -1,0 +1,106 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#include<malloc.h>
+
+typedef struct list
+{
+	int roll;
+	list *next;
+};
+
+list *c_list(list *start)
+{
+	list *node;
+	node = (list *)malloc(sizeof(list));
+	start = node;
+	char ch;
+	do
+	{
+		printf("\n\tEnter the roll :\t");
+		scanf("%d",&node->roll);
+		fflush(stdin);
+		node->next = '\0';
+		
+		printf("\n\tEnter Y to create more node :\t");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			node->next = (list *)malloc(sizeof(list));
+			node = node->next;
+			continue;
+		}
+		else
+		  break;
+	}while(toupper(ch) == 'Y');
+	
+	return(start);
+}
+
+void max(list *start)
+{
+	list *node = start;
+	int mx = 0;
+	while(node != '\0')
+	{
+		if(node->roll > mx)
+		{
+			mx = node->roll;	
+		}
+		else
+		{
+			node->roll = mx;
+		}
+		node = node->next;
+	}
+	printf("\n\tMaximum Value : \t%d",mx);
+}
+
+void min(list *start)
+{
+	list *node = start;
+	int mn = node->roll;
+	while(node != '\0')
+	{
+		if(node->roll > mn)
+		{
+			node->roll = mn;	
+		}
+		else
+		{
+			mn = node->roll;
+		}
+		node = node->next;
+	}
+	printf("\nMinimum Value : \t%d",mn);
+}
+
+void trav(list *start)
+{
+	if(start==NULL)
+	{
+		printf("\n list is not created.!!!!!!!");
+		return;
+	}	
+	else
+	{
+		list *node;
+		node=start;
+		while(node!='\0')
+		{
+			printf("\n\naddress of node: %u\t info: %d\t address of next node: %u",node,node->roll,node->next);
+			node = node->next;
+		}
+		return;
+	}
+}
+
+int main()
+{
+	list *start = '\0';
+	start = c_list(start);
+	trav(start);
+	max(start);
+	min(start);
+}
