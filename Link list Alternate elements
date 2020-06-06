@@ -1,0 +1,100 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#include<malloc.h>
+
+typedef struct list
+{
+	int roll;
+	list *next;
+};
+
+list *c_list(list *start, int *ncnt)
+{
+	list *node = (list *)malloc(sizeof(list));
+	start = node;
+	char ch;
+	do
+	{
+		++*ncnt;
+		printf("\n\tEnter the roll :\t");
+		scanf("%d",&node->roll);
+		fflush(stdin);
+		node->next = '\0';
+		
+		printf("\n\tEnter (Y|N) to continue :\t");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			node->next = (list *)malloc(sizeof(list));
+			node = node->next;
+			continue;
+		}
+		else
+		  break;
+	}while(toupper(ch) == 'Y');
+	
+	return(start);
+}
+
+void trav(list *start)
+{
+	if(start == NULL)
+	{
+		printf("\n\tLink list not created");
+	}
+	else
+	{
+		list *node = start;
+		while(node != '\0')
+		{
+			printf("\n\t Address of current node : \t%u\n\t Roll : \t%d\n\t Address of next node : \t%u\n",node, node->roll, node->next);
+			node = node->next;
+		}
+	}
+}
+
+list *alt_ele(list *start, list *start2, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\tLink list not created");
+	}
+	else
+	{
+		list *node = start;
+		list *node2 = (list *)malloc(sizeof(list));
+		start2 = node;
+		do
+		{
+			++*ncnt;
+			node2->roll = node->roll;
+			node = node->next;
+			node = node->next;
+			node2->next = '\0';
+			++*ncnt;
+			
+			if(node->next != '\0')
+			{
+				node2->next = (list *)malloc(sizeof(list));
+				node2 = node2->next;
+				continue;
+			}
+		}while(node->next != '\0');
+	}
+	return(start2);
+}
+
+int main()
+{
+	list *start = '\0';
+	list *start2 = '\0';
+	int cnt = 0;
+	start = c_list(start, &cnt);
+	trav(start);
+	printf("\n\t After copying alternate elements \n");
+	start2 = alt_ele(start, start2, &cnt);
+	trav(start2);
+	
+}
