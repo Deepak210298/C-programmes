@@ -1,0 +1,268 @@
+#include<stdio.h>
+#include<string.h>
+#include<malloc.h>
+#include<ctype.h>
+
+typedef struct dlist
+{
+	int roll;
+	dlist *prev;
+	dlist *next;
+};
+
+dlist *c_list(dlist *start, int *ncnt)
+{
+	dlist *node = (dlist *)malloc(sizeof(dlist));
+	start = node;
+	node->prev = '\0';
+	char ch;
+	do
+	{
+		++*ncnt;
+		printf("\n\t Enter the Roll number :");
+		scanf("%d",&node->roll);
+		fflush(stdin);
+		node->next = '\0';
+		
+		printf("\n\tDo you want to continue (Y|N): \t");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			node->next = (dlist *)malloc(sizeof(dlist));
+			node->next->prev = node;
+			node = node->next;
+		}
+		else
+		  break;
+	}while(toupper(ch) == 'Y');
+	
+	return(start);
+}
+
+void trav(dlist *start)
+{
+	if(start == NULL)
+	{
+		printf("\n\t link list not created........");
+		return;
+	}
+	else
+	{
+		dlist *node;
+		node = start;
+		while(node != '\0')
+		{
+			printf("\n\tAddress of current node : %u\n\t Address of previous node : %u\n\t Roll : %d\n\t Address of next node : %u\t\n",node, node->prev, node->roll, node->next);
+			node = node->next;
+		}
+	}
+}
+
+dlist *ins_fst(dlist *start, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\t Link list not created ...");
+	}
+	else
+	{
+		++*ncnt;
+		dlist *nnode = (dlist *)malloc(sizeof(dlist));
+		printf("\n\tEnter the roll");
+		scanf("%d",&nnode->roll);
+		dlist *node = start;
+		nnode->next = node;
+		nnode->prev = node->prev;
+		node->prev = nnode;
+		start = nnode;
+	}
+	return(start);
+}
+
+void ins_lst(dlist *start, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\t Link list not created ...");
+	}
+	else
+	{
+		++*ncnt;
+		dlist *nnode = (dlist *)malloc(sizeof(dlist));
+		printf("\n\tEnter the roll number :\t");
+		scanf("%d",&nnode->roll);
+		dlist *node = start;
+		while(node->next != '\0')
+		{
+			node = node->next;
+		}
+		nnode->prev = node;
+		nnode->next = node->next;
+		node->next = nnode;
+	}
+}
+
+dlist *ins_pos(dlist *start, int *ncnt)
+{
+	if(start = NULL)
+	{
+		printf("\n\tLink list not created...");
+	}
+	else
+	{
+		int pos;
+		do
+		{
+			printf("\n Enter Position to insert node to : ");
+			scanf("%d", &pos);
+			
+			if((pos < 1) || (pos > *ncnt))
+			{
+				printf("\n Invalid Position Try again ....");
+				continue;
+			}
+			else
+				break;
+		}while(1);
+
+		if(pos == 1)
+			start = ins_fst(start, ncnt);
+		else
+			if(pos == *ncnt)
+				ins_lst(start, ncnt);
+			else
+			{
+				++*ncnt;
+				dlist *nnode = (dlist *)malloc(sizeof(dlist));
+				printf("\n\tEnter the roll number :\t");
+				scanf("%d",&nnode->roll);
+				dlist *node = start;
+				int i = 1;
+				while(i < (pos - 1))
+				{
+					node = node->next;
+					++i;
+				}
+				nnode->prev = node;
+				nnode->next = node->next;
+				node->next = nnode;
+			}
+	}
+	return(start);
+}
+
+dlist *del_fst(dlist *start, int *ncnt)
+{
+	if(start = NULL)
+	{
+		printf("\n\tLink list not created...");
+	}
+	else
+	{
+		dlist *node = start;
+		node->next->prev = node->prev;
+		start = node->next;
+		free(node);
+		--*ncnt;
+	}
+	return(start);
+}
+
+void del_lst(dlist *start, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\tLink list not created");
+	}
+	else
+	{
+		dlist *prv, *nxt;
+		prv = start;
+		nxt = prv->next;
+		while(nxt->next != '\0')
+		{
+			prv = prv->next;
+			nxt = nxt->next;
+		}
+		
+		prv->next = nxt->next;
+		free(nxt);
+		--*ncnt;
+	}
+}
+
+dlist *del_pos(dlist *start, int *ncnt)
+{
+	if(start = NULL)
+	{
+		printf("\n\tLink list not created...");
+	}
+	else
+	{
+		int pos;
+		do
+		{
+			printf("\n\tEnter the position...");
+			scanf("%d",&pos);
+			if((pos < 1) || (pos > *ncnt))
+			{
+				printf("\n\tInvalid position ....");
+				continue;
+			}
+			else
+			  break;
+		}while(1);
+		
+		if(pos == 1)
+			start = del_fst(start, ncnt);
+		else
+			if(pos == *ncnt)
+				del_lst(start, ncnt);
+			else
+			{
+				dlist *prv, *nxt;
+				prv = start;
+				nxt = prv->next;
+				int i = 1;
+				while(i < (pos - 1))
+				{
+					prv = prv->next;
+					nxt = nxt->next;
+					++i;
+				}
+				
+				prv->next = nxt->next;
+				free(nxt);
+				--*ncnt;
+			}
+	}
+	return(start);
+}
+
+int main()
+{
+	dlist *start = '\0';
+	int cnt  = 0;
+	start = c_list(start, &cnt);
+	trav(start);
+	printf("\n\tAfter inserting at first position ");
+	start = ins_fst(start, &cnt);
+	trav(start);
+	printf("\n\tAfter inserting at last position ");
+	ins_lst(start, &cnt);
+	trav(start);
+	/*printf("\n\tAfter inserting at desired position ");
+	start = ins_pos(start, &cnt);
+	trav(start);
+	printf("\n\tAfter deleting at first position ");
+	start = del_fst(start, &cnt);
+	trav(start);*/
+	printf("\n\tAfter deleting at last position ");
+	del_lst(start, &cnt);
+	trav(start);
+	printf("\n\tAfter deleting at desired position ");
+	start = del_pos(start, &cnt);
+	trav(start);
+	return 0;
+}
