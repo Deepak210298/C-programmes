@@ -1,0 +1,89 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#include<malloc.h>
+
+typedef struct list
+{
+	int roll;
+	list *prev;
+	list *next;
+};
+
+list *c_list(list *start)
+{
+	list *node = (list *)malloc(sizeof(list));
+	start = node;
+	node->prev = '\0';
+	char ch;
+	do
+	{
+		printf("\n Enter the roll :\t");
+		scanf("%d",&node->roll);
+		fflush(stdin);
+		node->next = '\0';
+		
+		printf("\n Enter Y to continue otherwise N: \t");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			node->next = (list *)malloc(sizeof(list));
+			node->next->prev = node;
+			node = node->next;
+			continue;
+		}
+		else
+		  break;
+	}while(toupper(ch) == 'Y');
+	
+	return(start);
+}
+
+void merge(list *start, list *start1)
+{
+	if(start == NULL || start1 == NULL)
+	{
+		printf("\n Link list not created ...");
+	}
+	else
+	{
+		list *node = start, *node1 = start1;
+		while(node->next != NULL)
+		{
+			node = node->next;
+		}
+		node1->prev = node;
+		node->next = node1;
+	}
+}
+
+void trav(list *start)
+{
+	if(start == NULL)
+	{
+		printf("\n Link list is not created....");
+	}	
+	else
+	{
+		list *node;
+		node = start;
+		while(node != '\0')
+		{
+			printf("\n\naddress of node: %u\t info: %d\t address of next node: %u",node,node->roll,node->next);
+			node = node->next;
+		}
+	}
+}
+
+int main()
+{
+	list *start = '\0', *start1 = '\0';
+	start = c_list(start);
+	trav(start);
+	start1 = c_list(start1);
+	trav(start1);
+	printf("\n\n After gettng concatenated .....\n");
+	merge(start, start1);
+	trav(start);
+}
