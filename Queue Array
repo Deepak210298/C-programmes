@@ -1,0 +1,147 @@
+#include<stdio.h>
+#include<ctype.h>
+#include<malloc.h>
+#include<string.h>
+#define SIZE 100
+
+void menu()
+{
+	printf("\n \t\t\t Stack Operation using Array");
+	printf("\n\t\t 1. Create Queue");
+	printf("\n\t\t 2. Traverse Queue");
+	printf("\n\t\t 3. Push Element");
+	printf("\n\t\t 4. Pop Operation");
+	printf("\n\t\t 5. Peek Operation");
+	printf("\n\t\t 6. Exit");
+	printf("\n enter Your choice (1-6) :");
+}
+
+void cr_queue(int queue[], int *frnt, int *rear)
+{
+	char ch;
+	do
+	{
+		if((*frnt == -1) && (*rear == -1))
+		{
+			++*rear;
+			++*frnt;
+		}
+		else
+		{
+			++*rear;
+		}
+		printf("\n Enter Information :");
+		scanf("%d", &queue[*rear]);
+		fflush(stdin);
+		printf("\n Do You want to continue (Y/N) :");
+		scanf("%c", &ch);
+		fflush(stdin);		
+		if(toupper(ch)=='Y')
+		{
+			if(*rear==(SIZE-1))
+			{
+				printf("\n Array Full ... Element cannot be inserted ..");
+				break;
+			}
+			else
+				continue;
+		}
+		else
+			break;		
+	}while(toupper(ch)=='Y');
+}
+
+void trav(int queue[], int *rear, int *frnt)
+{
+	if((*rear == -1) || (*frnt == -1))
+	{
+		printf("\n Stack is Empty ....");
+	}
+	else
+	{
+		int i;
+		for(i = *frnt; i <= *rear; ++i)
+		{
+			printf("\n arr[%d]=%d", i, queue[i]);
+		}
+	}
+}
+
+void push(int queue[], int *rear, int *frnt)
+{
+	if((*rear == -1) || (*rear == (SIZE-1)))
+	{
+		printf("\n Stack is Full or Empty ... Try Again");
+	}
+	else
+	{
+		++*rear;
+		printf("\n Enter Information :");
+		scanf("%d", &queue[*rear]);		
+	}
+}
+
+void pop(int *rear)
+{
+	if((*rear == -1) || (*rear == (SIZE-1)))
+	{
+		printf("\n Stack is Empty ... Try Again");
+	}
+	else
+	{
+		--*rear;
+	}
+}
+
+void peek(int queue[], int *frnt, int *rear)
+{
+	if((*rear == -1) || (*rear == (SIZE-1)))
+	{
+		printf("\n Stack is Empty ....");
+	}
+	else
+	{
+		printf("\n Element at the top");
+		printf("\n arr[%d]=%d", *frnt, queue[*frnt]);
+	}
+}
+
+int main()
+{
+	int ch, rear = -1, frnt = -1;
+	int queue[SIZE];
+	do
+	{
+		do
+		{
+			menu();
+			scanf("%d", &ch);
+			if((ch<1)||(ch>6))
+			{
+				printf("\n Invalid Choice .. Try again");
+				continue;
+			}
+			else
+				break;
+		}while(1);
+		
+		switch(ch)
+		{
+			case 1:
+				cr_queue(queue, &frnt, &rear);
+				break;
+			case 2:
+				trav(queue, &rear, &frnt);
+				break;
+			case 3:
+				push(queue, &rear, &frnt);
+				break;
+			case 4:
+				pop(&rear);
+				break;
+			case 5:
+				peek(queue, &frnt, &rear);
+				break;
+		}
+	}while(ch<6);
+}
