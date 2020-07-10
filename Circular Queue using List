@@ -1,0 +1,145 @@
+#include<stdio.h>
+#include<ctype.h>
+#include<string.h>
+#include<malloc.h>
+
+typedef struct list
+{
+	int info;
+	list *next;
+};
+
+void menu()
+{
+	printf("\n\t\t Main Menu");
+	printf("\n\t 1. Create Circular Queue");
+	printf("\n\t 2. Traverse Circular Queue");
+	printf("\n\t 3. Push");
+	printf("\n\t 4. POP");
+	printf("\n\t 5. Peek");
+	printf("\n\t 6. Exit");
+	printf("\n\t Please enter your choice (1-6) :");
+}
+
+void c_list(list **start, int *pcnt, list **rear)
+{
+	char ch;
+	list *node;
+	node=(list *)malloc(sizeof(list));
+	*start=node;
+	do
+	{
+		++*pcnt;
+		printf("\n Enter information :");
+		scanf("%d", &node->info);
+		fflush(stdin);
+		node->next=*start;
+		
+		printf("\n Do you want to continue (Y/N):");
+		scanf("%c", &ch);
+		fflush(stdin);
+		if(toupper(ch)=='Y')
+		{
+			node->next=(list *)malloc(sizeof(list));
+			node=node->next;
+			continue;
+		}
+		else
+			break;
+	}while(toupper(ch)=='Y');
+	*rear=node;
+}
+
+void trav(list *start)
+{
+	if(start==NULL)
+	{
+		printf("\n Linked List not created ...");
+		return;
+	}
+	else
+	{
+		list *node;
+		node=start;
+		do
+		{
+			printf("\n\n Address of Node : %u \t info: %d \t Address of Next Node : %u", node, node->info, node->next);
+			
+			node=node->next;
+		}while(node!=start);
+	}
+}
+
+void push(list **start, int *pcnt, list **rear)
+{
+	if(*start==NULL)
+	{
+		printf("\n Linked List not created ...");
+	}
+	else
+	{
+		++*pcnt;
+		list *nnode=(list *)malloc(sizeof(list));
+		printf("\n Enter Information for new Node :");
+		scanf("%d", &nnode->info);
+		nnode->next=(*rear)->next;
+		(*rear)->next=nnode;
+		*rear=nnode; 
+	}
+}
+
+void pop(list **start, int *pcnt, list **rear)
+{
+	if(*start==NULL)
+	{
+		printf("\n Circular Linked List not created ...");
+	}
+	else
+	{
+		list *node=*start;
+		(*rear)->next=node->next;
+		*start=node->next;
+		free(node);
+		--*pcnt;
+	}
+}
+
+int main()
+{
+	list *start=NULL, *rear=NULL;
+	int cnt=0, ch1, ch2;
+	do
+	{
+		do
+		{
+			menu();
+			scanf("%d", &ch1);
+			if((ch1<1)||(ch1>6))
+			{
+				printf("\n Invalid Choice Try again ...");
+				continue;
+			}
+			else
+				break;
+		}while(1);
+		
+		switch(ch1)
+		{
+			case 1:
+				c_list(&start, &cnt, &rear);
+				printf("\n Number of Nodes after creation : %d \n", cnt);
+				break;
+			case 2:
+				trav(start);
+				break;
+			case 3:
+				push(&start, &cnt, &rear);
+				printf("\n Number of Nodes after insertion : %d\n", cnt);
+				break;				
+			case 4:
+				pop(&start, &cnt, &rear);
+				printf("\n Number of Nodes after deletion : %d\n", cnt);
+				break;
+		}
+	}while(ch1<5);	
+}
