@@ -1,0 +1,138 @@
+#include<stdio.h>
+#include<string.h>
+#include<malloc.h>
+#include<ctype.h>
+#define SIZE 100
+
+void menu()
+{
+	printf("\n \t\t\t stack operation using array");
+	printf("\n\t\t 1. create stack");
+	printf("\n\t\t 2. traverse stack");
+	printf("\n\t\t 3. push stack");
+	printf("\n\t\t 4. pop stack");
+	printf("\n\t\t 5. peek stack");
+	printf("\n\t\t 6. Exit");
+	printf("\n enter the choice \n");
+}
+
+void cr_stack(int stck[], int *TOP)
+{
+	char ch;
+	int *t = TOP;
+	do
+	{
+		++*t;
+		printf("\n Enter the information :");
+		scanf("%d",&stck[*t]);
+		fflush(stdin);
+		printf("\n Do you want to continue (Y|N)");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			if(*t == (SIZE - 1))
+			{
+				printf("\nArray full ... element cannot be inserted");;
+				break;
+			}
+		}
+		else
+		  continue;
+	}while(toupper(ch) == 'Y');
+	TOP = t;
+}
+
+void trav(int stck[], int t)
+{
+	if(t == -1)
+	{
+		printf("\n stack is empty");
+	}
+	else
+	{
+		int i;
+		for(int i= t; i >= 0; --i)
+		{
+			printf("\n arr[%d] = %d", i, stck[i]);
+		}
+	}
+}
+
+void push(int stck[], int *t)
+{
+	if((*t == -1) || (*t ==(SIZE - 1)))
+	{
+		printf("\n stack is full or empty.....try again");
+	}
+	else
+	{
+		++*t;
+		printf("\n enter information");
+		scanf("%d",&stck[*t]);
+	}
+}
+
+void pop(int *t)
+{
+	if(*t == -1)
+	{
+		printf("stack is empty ...try again");
+	}
+	else
+	{
+		--*t;
+	}
+}
+
+void peek(int stck[], int t)
+{
+	if(t == -1)
+	{
+		printf("stack is empty ");
+	}
+	else
+	{
+		printf("\n Element at the top");
+		printf("\n arr[%d] = %d",t,stck[t]);
+	}
+}
+
+int main()
+{
+	int ch, top = -1;
+	int stck[SIZE];
+	do
+	{
+		do
+		{
+			menu();
+			scanf("%d",&ch);
+			if((ch < 1) || (ch > 6))
+			{
+				printf("\n invalid choice .. try again");
+				continue;
+			}
+			else
+			  break;
+		}while(1);
+		switch(ch)
+		{
+			case 1:
+				cr_stack(stck, &top);
+				break;
+			case 2:
+				trav(stck, top);
+				break;
+			case 3:
+				push(stck, &top);
+				break;
+			case 4:
+				pop(&top);
+				break;
+			case 5:
+				peek(stck, top);
+				break;
+		}
+	}while(ch < 6);
+}
