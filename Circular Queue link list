@@ -1,0 +1,163 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#include<malloc.h>
+
+typedef struct cir_queue
+{
+	int info;
+	cir_queue *next;
+};
+
+void menu()
+{
+	printf("\n \t\t\t Circular Queue Operation");
+	printf("\n\t\t 1. Create Queue");
+	printf("\n\t\t 2. Traverse Queue");
+	printf("\n\t\t 3. Push Element");
+	printf("\n\t\t 4. Pop Operation");
+	printf("\n\t\t 5. Peek Operation");
+	printf("\n\t\t 6. Exit");
+	printf("\n enter Your choice (1-6) :");
+}
+
+
+cir_queue *c_cir_queue(cir_queue *start, cir_queue *frnt, cir_queue *rear, int *ncnt)
+{
+	cir_queue *node = (cir_queue *)malloc(sizeof(cir_queue));
+	start = node;
+	char ch;
+	
+	do
+	{
+		++*ncnt;
+		printf("\n\tEnter the information :\t");
+		scanf("%d",&node->info);
+		fflush(stdin);
+		node->next = '\0';
+		
+		printf("\n\tEnter (Y|N) to continue :\t");
+		scanf("%c",&ch);
+		fflush(stdin);
+		if(toupper(ch) == 'Y')
+		{
+			node->next = (cir_queue *)malloc(sizeof(cir_queue));
+			node = node->next;
+			continue;
+		}
+		else
+		  break;
+	}while(toupper(ch) == 'Y');
+	rear = node;
+}
+
+void push(cir_queue *start, cir_queue *rear, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\tLink cir_queue not created.....");
+	}
+	else
+	{
+		++ncnt;
+		cir_queue *nnode = (cir_queue *)malloc(sizeof(cir_queue));
+		printf("\n\tEnter the information :\t");
+		scanf("%d",&nnode->info);
+		nnode->next = rear->next;
+		rear->next = nnode;
+		rear = nnode;
+	}
+}
+
+void trav(cir_queue *start)
+{
+	if(start == NULL)
+	{
+		printf("\n\tLink cir_queue not created.....");
+	}
+	else
+	{
+		cir_queue *node = start;
+		do
+		{
+			printf("\n\tAddress of current node : \t%u\n\t Information : \t%d\n\t Address of next node : \t%u\n",node, node->info, node->next);
+			node =node->next;
+		}while(node != start);
+	}
+}
+
+cir_queue *pop(cir_queue *start, cir_queue *rear, int *ncnt)
+{
+	if(start == NULL)
+	{
+		printf("\n\t Link cir_queue not created");
+	}
+	else
+	{
+		cir_queue *node = start;
+		rear->next = node->next;
+		start = node->next;
+		free(node);
+		--*ncnt;
+	}
+	return(start);
+}
+
+
+void peek(cir_queue *start, int *frnt, int *rear)
+{
+	if(start = NULL)
+	{
+		printf("\n\t Link list not created");
+	}
+	else
+	{
+		printf("\n\t peek : \t%d",start->info);
+	}
+}
+
+int main()
+{
+	cir_queue *start = '\0', *frnt = NULL, *rear = NULL;
+	int cnt = 0;
+	int ch;
+	do
+	{
+		do
+		{
+			menu();
+			scanf("%d", &ch);
+			if((ch<1)||(ch>6))
+			{
+				printf("\n Invalid Choice .. Try again");
+				continue;
+			}
+			else
+				break;
+		}while(1);
+		
+		switch(ch)
+		{
+			case 1:
+				c_cir_queue(start, rear, &cnt);
+				printf("\n Front : %d \t Rear : %d ", frnt, rear);
+				break;
+			case 2:
+				trav(start);
+				printf("\n Front : %d \t Rear : %d ", frnt, rear);
+				break;
+			case 3:
+				push(start, &frnt, &rear, &cnt);
+				printf("\n Front : %d \t Rear : %d ", frnt, rear);
+				break;
+			case 4:
+				start = pop(start, &frnt, &rear, &cnt);
+				printf("\n Front : %d \t Rear : %d ", frnt, rear);
+				break;
+			case 5:
+				peek(start, &frnt, &rear);
+				printf("\n Front : %d \t Rear : %d ", frnt, rear);
+				break;
+		}
+	}while(ch<6);
+}
